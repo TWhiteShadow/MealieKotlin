@@ -9,4 +9,23 @@ import com.example.mealie.model.Recipe
 @TypeConverters(Converters::class)
 abstract class AppDb : RoomDatabase() {
     abstract fun dao(): RecipeDao
+    
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDb? = null
+
+        fun getInstance(context: android.content.Context): AppDb {
+            return INSTANCE ?: synchronized(this) {
+                val instance = androidx.room.Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDb::class.java,
+                    "app_database"
+                )
+                .fallbackToDestructiveMigration(dropAllTables = true)
+                .build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
 }

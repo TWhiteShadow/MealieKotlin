@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation("io.coil-kt.coil3:coil-compose:3.4.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
     val roomVersion = "2.8.4"
     // Les bibliothèques Room de base
     implementation("androidx.room:room-runtime:$roomVersion")

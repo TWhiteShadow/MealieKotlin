@@ -4,16 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,22 +21,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mealie.data.AppDb
 import com.example.mealie.screens.AddScreen
 import com.example.mealie.screens.FavoritesScreen
 import com.example.mealie.screens.HomeScreen
 import com.example.mealie.screens.RecipeProductScreen
 import com.example.mealie.ui.theme.MealieTheme
+import com.example.mealie.viewModel.RecipeViewModel
+import com.example.mealie.viewModel.RecipeViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +60,10 @@ sealed class BottomNavItem(val route: String, val icon: androidx.compose.ui.grap
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyApp(mainViewModel: MainViewModel = viewModel()) {
+    val context = LocalContext.current
+    val dao = AppDb.getInstance(context).dao()
+    val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(dao))
+
     val navController = rememberNavController()
     val items = listOf(
         BottomNavItem.Home,
@@ -106,10 +108,10 @@ fun MyApp(mainViewModel: MainViewModel = viewModel()) {
                 startDestination = BottomNavItem.Home.route
             ) {
                 composable(BottomNavItem.Home.route) {
-                    HomeScreen(navController, mainViewModel)
+                    HomeScreen(navController, mainViewModel, recipeViewModel)
                 }
                 composable(BottomNavItem.Add.route) {
-                    AddScreen(navController, mainViewModel)
+                    AddScreen(navController, mainViewModel, recipeViewModel)
                 }
                 composable(BottomNavItem.Favorites.route) {
                     FavoritesScreen(navController, mainViewModel)
