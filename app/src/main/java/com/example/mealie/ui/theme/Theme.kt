@@ -1,5 +1,6 @@
 package com.example.mealie.ui.theme
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +9,23 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+
+val MealieWarmLightScheme = lightColorScheme(
+    primary = PeachAccent,
+    onPrimary = Color.White,
+    secondary = PeachMuted,
+    onSecondary = PeachOnBackground,
+    tertiary = PeachMuted,
+    background = PeachBackground,
+    onBackground = PeachOnBackground,
+    surface = PeachSurface,
+    onSurface = PeachOnBackground,
+    surfaceVariant = Color(0xFFFFFAF5),
+    onSurfaceVariant = Color(0xFF5C4D42),
+    outline = Color(0xFFD4B8A8),
+)
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -35,8 +52,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun MealieTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -46,7 +62,7 @@ fun MealieTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> MealieWarmLightScheme
     }
 
     MaterialTheme(

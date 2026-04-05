@@ -117,8 +117,11 @@ fun MyApp(mainViewModel: MainViewModel = viewModel()) {
                     FavoritesScreen(navController, mainViewModel)
                 }
                 composable("recipe_product/{recipeId}") { backStackEntry ->
-                    val recipeId = backStackEntry.arguments?.getString("recipeId") ?: "1"
-                    RecipeProductScreen(navController, mainViewModel, recipeId)
+                    val recipeId = backStackEntry.arguments
+                        ?.getString("recipeId")
+                        ?.toIntOrNull() ?: 1
+
+                    RecipeProductScreen(navController, recipeId, recipeViewModel)
                 }
             }
         }
