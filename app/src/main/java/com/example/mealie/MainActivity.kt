@@ -114,7 +114,7 @@ fun MyApp(mainViewModel: MainViewModel = viewModel()) {
                     AddScreen(navController, mainViewModel, recipeViewModel)
                 }
                 composable(BottomNavItem.Favorites.route) {
-                    FavoritesScreen(navController, mainViewModel, recipeViewModel)
+                    FavoritesScreen(navController, recipeViewModel)
                 }
                 composable("recipe_product/{recipeId}") { backStackEntry ->
                     val recipeId = backStackEntry.arguments
