@@ -1,82 +1,77 @@
-package com.example.mealie.screens
+package com.example.mealie.ui.screens
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil3.compose.AsyncImage
-import com.example.mealie.MainViewModel
-import com.example.mealie.R
+import com.example.mealie.ui.components.RecipeCard
 import com.example.mealie.viewModel.RecipeViewModel
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: MainViewModel, recipeViewModel: RecipeViewModel) {
+fun HomeScreen(
+    navController: NavController,
+    recipeViewModel: RecipeViewModel
+) {
     val recipes by recipeViewModel.recipes.collectAsState()
 
-    LazyColumn(
+    if (recipes.isEmpty()) return
+
+    val firstRecipe = recipes.first()
+    val otherRecipes = recipes.drop(1)
+
+    LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(13.dp),
+        verticalArrangement = Arrangement.spacedBy(13.dp),
     ) {
-        items(recipes) { recipe ->
-            Card(
+
+        item(span = { GridItemSpan(2) }) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = "Bonjour, Chef 👋",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
+                    text = "Que cuisinons nous aujourd'hui ?",
+                    style = MaterialTheme.typography.headlineLarge
+                )
+            }
+        }
+
+        item(span = { GridItemSpan(2) }) {
+            RecipeCard(
+                recipe = firstRecipe,
+                big = true,
+                onClick = {
+                    navController.navigate("recipe_product/${firstRecipe.id}")
+                }
+            )
+        }
+
+        items(
+            items = otherRecipes,
+            key = { it.id }
+        ) { recipe ->
+            RecipeCard(
+                recipe = recipe,
                 onClick = {
                     navController.navigate("recipe_product/${recipe.id}")
-                },
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(8.dp)
-            ) {
-                Column {
-                    if (recipe.imageUrl != null) {
-                        AsyncImage(
-                            model = recipe.imageUrl,
-                            contentDescription = "Meal Image",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(id = R.drawable.pasta),
-                            contentDescription = "Meal Image",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                        )
-                    }
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = recipe.title,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text(
-                            text = recipe.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                    }
                 }
-            }
+            )
         }
     }
 }

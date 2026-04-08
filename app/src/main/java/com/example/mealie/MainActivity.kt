@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -19,7 +18,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,10 +29,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mealie.data.AppDb
-import com.example.mealie.screens.AddScreen
+import com.example.mealie.ui.screens.AddScreen
 import com.example.mealie.screens.FavoritesScreen
-import com.example.mealie.screens.HomeScreen
-import com.example.mealie.screens.RecipeProductScreen
+import com.example.mealie.ui.screens.HomeScreen
+import com.example.mealie.ui.screens.RecipeProductScreen
 import com.example.mealie.ui.theme.MealieTheme
 import com.example.mealie.viewModel.RecipeViewModel
 import com.example.mealie.viewModel.RecipeViewModelFactory
@@ -59,7 +57,7 @@ sealed class BottomNavItem(val route: String, val icon: androidx.compose.ui.grap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyApp(mainViewModel: MainViewModel = viewModel()) {
+fun MyApp() {
     val context = LocalContext.current
     val dao = AppDb.getInstance(context).dao()
     val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(dao))
@@ -70,15 +68,9 @@ fun MyApp(mainViewModel: MainViewModel = viewModel()) {
         BottomNavItem.Add,
         BottomNavItem.Favorites
     )
-    val uiState by mainViewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(uiState.title) }
-            )
-        },
         bottomBar = {
             NavigationBar {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -108,10 +100,10 @@ fun MyApp(mainViewModel: MainViewModel = viewModel()) {
                 startDestination = BottomNavItem.Home.route
             ) {
                 composable(BottomNavItem.Home.route) {
-                    HomeScreen(navController, mainViewModel, recipeViewModel)
+                    HomeScreen(navController, recipeViewModel)
                 }
                 composable(BottomNavItem.Add.route) {
-                    AddScreen(navController, mainViewModel, recipeViewModel)
+                    AddScreen(navController, recipeViewModel)
                 }
                 composable(BottomNavItem.Favorites.route) {
                     FavoritesScreen(navController, recipeViewModel)

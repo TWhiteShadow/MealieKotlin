@@ -1,4 +1,4 @@
-package com.example.mealie.screens
+package com.example.mealie.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -24,7 +24,6 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Whatshot
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -88,7 +88,7 @@ fun RecipeProductScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(240.dp)
-                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
+                .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)),
             ) {
             //image et si c'est nul image pasta
             if (!recipenonull.imageUrl.isNullOrBlank()) {

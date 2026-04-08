@@ -1,4 +1,4 @@
-package com.example.mealie.screens
+package com.example.mealie.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,12 +30,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mealie.MainViewModel
 import com.example.mealie.model.Recipe
 import com.example.mealie.viewModel.RecipeViewModel
 
 @Composable
-fun AddScreen(navController: NavController, viewModel: MainViewModel, recipeViewModel: RecipeViewModel) {
+fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var imageUrl by remember { mutableStateOf("") }
