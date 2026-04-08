@@ -32,6 +32,7 @@ fun RecipeCard(
         onClick = onClick,
         modifier = modifier,
         elevation = CardDefaults.cardElevation(8.dp),
+        shape = RoundedCornerShape(32.dp),
     ) {
         Column {
             if (!recipe.imageUrl.isNullOrBlank()) {
@@ -42,7 +43,7 @@ fun RecipeCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height( if (big) 200.dp else 100.dp)
-                        .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                        .clip(RoundedCornerShape(bottomEnd = 32.dp, bottomStart = 32.dp))
                 )
             } else {
                 Image(
@@ -52,19 +53,19 @@ fun RecipeCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
-                        .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                        .clip(RoundedCornerShape(bottomEnd = 32.dp, bottomStart = 32.dp))
                 )
             }
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = recipe.title,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.titleLarge,
+                    maxLines = 3,
+                    style = if (big) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.bodyMedium,
                 )
                 Text(
                     text = recipe.description,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = if (big) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 8.dp),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
