@@ -38,13 +38,13 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var imageUrl by remember { mutableStateOf("") }
-    
+
     var ingredientsList by remember { mutableStateOf(listOf<String>()) }
     var currentIngredient by remember { mutableStateOf("") }
-    
+
     var stepsList by remember { mutableStateOf(listOf<String>()) }
     var currentStep by remember { mutableStateOf("") }
-    
+
     var prepTime by remember { mutableStateOf("") }
     var cookTime by remember { mutableStateOf("") }
     var servings by remember { mutableStateOf("") }
@@ -67,7 +67,7 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
         OutlinedTextField(
             value = title,
             onValueChange = { title = it },
-            label = { Text("Title") },
+            label = { Text("Titre") },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
@@ -79,13 +79,12 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
         OutlinedTextField(
             value = imageUrl,
             onValueChange = { imageUrl = it },
-            label = { Text("Image URL") },
+            label = { Text("URL de l'image") },
             modifier = Modifier.fillMaxWidth()
         )
-        
-        // Ingredients
+
         Text(
-            text = "Ingredients",
+            text = "Ingrédients",
             modifier = Modifier.align(Alignment.Start).padding(top = 8.dp),
             style = MaterialTheme.typography.titleSmall
         )
@@ -95,20 +94,24 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
             ) {
                 Text("- $ingredient", modifier = Modifier.weight(1f))
-                IconButton(onClick = { 
-                    ingredientsList = ingredientsList.toMutableList().apply { removeAt(index) } 
+                IconButton(onClick = {
+                    ingredientsList = ingredientsList.toMutableList().apply { removeAt(index) }
                 }) {
-                    Icon(Icons.Default.Close, contentDescription = "Remove")
+                    Icon(Icons.Default.Close, contentDescription = "Supprimer")
                 }
             }
         }
         OutlinedTextField(
             value = currentIngredient,
             onValueChange = { currentIngredient = it },
-            label = { Text("Add Ingredient") },
-            placeholder = { Text("Type and press Enter") },
+            label = { Text("Ajouter un ingrédient") },
+            placeholder = { Text("Tapez et appuyez sur Entrée") },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Text
+            ),
             keyboardActions = KeyboardActions(
                 onDone = {
                     if (currentIngredient.isNotBlank()) {
@@ -119,9 +122,8 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
             )
         )
 
-        // Steps
         Text(
-            text = "Steps",
+            text = "Étapes",
             modifier = Modifier.align(Alignment.Start).padding(top = 8.dp),
             style = MaterialTheme.typography.titleSmall
         )
@@ -131,20 +133,24 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
             ) {
                 Text("${index + 1}. $step", modifier = Modifier.weight(1f))
-                IconButton(onClick = { 
-                    stepsList = stepsList.toMutableList().apply { removeAt(index) } 
+                IconButton(onClick = {
+                    stepsList = stepsList.toMutableList().apply { removeAt(index) }
                 }) {
-                    Icon(Icons.Default.Close, contentDescription = "Remove")
+                    Icon(Icons.Default.Close, contentDescription = "Supprimer")
                 }
             }
         }
         OutlinedTextField(
             value = currentStep,
             onValueChange = { currentStep = it },
-            label = { Text("Add Step") },
-            placeholder = { Text("Type and press Enter") },
+            label = { Text("Ajouter une étape") },
+            placeholder = { Text("Tapez et appuyez sur Entrée") },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Text
+            ),
             keyboardActions = KeyboardActions(
                 onDone = {
                     if (currentStep.isNotBlank()) {
@@ -155,45 +161,44 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
             )
         )
 
-        // Numeric fields on one row
-        Row (
+        Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
         ) {
             OutlinedTextField(
                 value = prepTime,
                 onValueChange = { prepTime = it },
-                label = { Text("Prep (min)") },
+                label = { Text("Préparation (min)") },
                 modifier = Modifier.weight(1f),
                 isError = isPrepTimeError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                supportingText = { if (isPrepTimeError) Text("Invalid") }
+                supportingText = { if (isPrepTimeError) Text("Invalide") }
             )
             OutlinedTextField(
                 value = cookTime,
                 onValueChange = { cookTime = it },
-                label = { Text("Cook (min)") },
+                label = { Text("Cuisson (min)") },
                 modifier = Modifier.weight(1f),
                 isError = isCookTimeError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                supportingText = { if (isCookTimeError) Text("Invalid") }
+                supportingText = { if (isCookTimeError) Text("Invalide") }
             )
         }
-            OutlinedTextField(
-                value = servings,
-                onValueChange = { servings = it },
-                label = { Text("Servings") },
-                modifier = Modifier.fillMaxWidth(),
-                isError = isServingsError,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                supportingText = { if (isServingsError) Text("Invalid") }
-            )
+        OutlinedTextField(
+            value = servings,
+            onValueChange = { servings = it },
+            label = { Text("Portions") },
+            modifier = Modifier.fillMaxWidth(),
+            isError = isServingsError,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            supportingText = { if (isServingsError) Text("Invalide") }
+        )
 
         Button(
             onClick = {
                 val finalIngredients = ingredientsList + if (currentIngredient.isNotBlank()) listOf(currentIngredient.trim()) else emptyList()
                 val finalSteps = stepsList + if (currentStep.isNotBlank()) listOf(currentStep.trim()) else emptyList()
-                
+
                 val recipe = Recipe(
                     title = title.trim(),
                     description = description.trim(),
@@ -208,9 +213,9 @@ fun AddScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
                 navController.popBackStack()
             },
             enabled = isValid,
-            modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
+            modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text("Save Recipe")
+            Text("Enregistrer la recette")
         }
     }
 }

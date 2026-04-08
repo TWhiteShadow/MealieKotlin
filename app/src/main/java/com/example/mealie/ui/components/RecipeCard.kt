@@ -60,14 +60,14 @@ fun RecipeCard(
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = recipe.title,
-                    maxLines = 3,
+                    maxLines = 2,
                     style = if (big) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.bodyMedium,
                 )
                 Text(
                     text = recipe.description,
                     style = if (big) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 8.dp),
-                    maxLines = 3,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
             }

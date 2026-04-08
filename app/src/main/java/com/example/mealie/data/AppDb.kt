@@ -22,7 +22,7 @@ abstract class AppDb : RoomDatabase() {
                     "app_database"
                 )
                 .fallbackToDestructiveMigration(dropAllTables = true)
-                .createFromAsset("SQLite.db")
+                .createFromAsset("SQLite.db") // Comment this line if you want to stop pre-populating the database, you can then recomment it after the first run to avoid overwriting user data on subsequent runs
                 .build()
                 INSTANCE = instance
                 instance

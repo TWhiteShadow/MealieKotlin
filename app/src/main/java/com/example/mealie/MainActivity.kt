@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,8 +28,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mealie.data.AppDb
-import com.example.mealie.ui.screens.AddScreen
 import com.example.mealie.screens.FavoritesScreen
+import com.example.mealie.ui.screens.AddScreen
 import com.example.mealie.ui.screens.HomeScreen
 import com.example.mealie.ui.screens.RecipeProductScreen
 import com.example.mealie.ui.theme.MealieTheme
@@ -49,10 +48,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-sealed class BottomNavItem(val route: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val label: String) {
-    object Home : BottomNavItem("home", Icons.Default.Home, "Home")
-    object Add : BottomNavItem("add", Icons.Default.Add, "Add")
-    object Favorites : BottomNavItem("favorites", Icons.Default.Favorite, "Favorites")
+sealed class BottomNavItem(
+    val route: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val label: String
+) {
+    object Home : BottomNavItem("home", Icons.Default.Home, "Accueil")
+    object Add : BottomNavItem("add", Icons.Default.Add, "Ajouter")
+    object Favorites : BottomNavItem("favorites", Icons.Default.Favorite, "Favoris")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +73,6 @@ fun MyApp() {
     )
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -94,29 +96,29 @@ fun MyApp() {
             }
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            NavHost(
-                navController = navController,
-                startDestination = BottomNavItem.Home.route
-            ) {
-                composable(BottomNavItem.Home.route) {
-                    HomeScreen(navController, recipeViewModel)
-                }
-                composable(BottomNavItem.Add.route) {
-                    AddScreen(navController, recipeViewModel)
-                }
-                composable(BottomNavItem.Favorites.route) {
-                    FavoritesScreen(navController, recipeViewModel)
-                }
-                composable("recipe_product/{recipeId}") { backStackEntry ->
-                    val recipeId = backStackEntry.arguments
-                        ?.getString("recipeId")
-                        ?.toIntOrNull() ?: 1
+        NavHost(
+            navController = navController,
+            startDestination = BottomNavItem.Home.route,
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
+        ) {
+            composable(BottomNavItem.Home.route) {
+                HomeScreen(navController, recipeViewModel)
+            }
+            composable(BottomNavItem.Add.route) {
+                AddScreen(navController, recipeViewModel)
+            }
+            composable(BottomNavItem.Favorites.route) {
+                FavoritesScreen(navController, recipeViewModel)
+            }
+            composable("recipe_product/{recipeId}") { backStackEntry ->
+                val recipeId = backStackEntry.arguments
+                    ?.getString("recipeId")
+                    ?.toIntOrNull() ?: 1
 
-                    RecipeProductScreen(navController, recipeId, recipeViewModel)
-                }
+                RecipeProductScreen(navController, recipeId, recipeViewModel)
             }
         }
     }
 }
-
