@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import com.example.mealie.MainViewModel
 import com.example.mealie.R
 import com.example.mealie.model.Recipe
 import com.example.mealie.viewModel.RecipeViewModel
